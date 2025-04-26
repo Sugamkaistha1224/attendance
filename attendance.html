@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style type="text/css">
+        /* Global Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7fa;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Header Styles */
+.header {
+    width: 100%;
+    padding: 1rem 2rem;
+    background-color: #3f51b5;
+    color: white;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header-title {
+    margin: 0;
+}
+
+/* Navigation Styles */
+.nav-bar {
+    width: 100%;
+    background-color: #283593;
+    padding: 0.5rem 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.nav-list {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-list li {
+    margin: 0 1rem;
+}
+
+.nav-list a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.nav-list a:hover {
+    color: #ffeb3b;
+}
+
+/* Dashboard and Card Styles */
+.dashboard-section {
+    margin: 2rem;
+    padding: 1.5rem;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 80%;
+}
+
+.dashboard-cards {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1rem;
+}
+
+.card {
+    background-color: #3f51b5;
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    width: 30%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Controls Section Styles */
+.controls-section {
+    margin: 2rem;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.control-input, .control-select, .control-button {
+    padding: 0.8rem;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 0.5rem;
+    width: 18%;
+}
+
+.control-button {
+    background-color: #3f51b5;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.control-button:hover {
+    background-color: #283593;
+}
+
+/* Visual Analysis Section Styles */
+.visual-section {
+    margin: 2rem;
+    padding: 1.5rem;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    text-align: center;
+}
+
+/* Attendance Table Styles */
+.attendance-section {
+    margin: 2rem;
+    padding: 1.5rem;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 80%;
+}
+
+.attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.attendance-table th, .attendance-table td {
+    border: 1px solid #ddd;
+    padding: 0.8rem;
+    text-align: center;
+}
+
+.attendance-table th {
+    background-color: #3f51b5;
+    color: white;
+}
+
+.attendance-table td .present {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.attendance-table td .absent {
+    color: #F44336;
+    font-weight: bold;
+}
+
+    </style>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <h1 class="header-title">Edusphere Attendance Dashboard</h1>
+    </header>
+
+    <!-- Navigation Section -->
+    <nav class="nav-bar">
+     <ul class="nav-list">
+    <li><a href="#" id="addEntry">Add New Report</a></li>
+    <li><a href="#" id="viewReports">View Reports</a></li>
+    <li><a href="#" id="filter">Filter by Date/Class</a></li>
+</ul>
+    </nav>
+<script type="text/javascript">
+    // Navigation buttons
+const addEntryBtn = document.getElementById("addEntry");
+const viewReportsBtn = document.getElementById("viewReports");
+const filterBtn = document.getElementById("filter");
+
+// Sections
+const manualEntrySection = document.getElementById("manualEntry");
+const attendanceSheetSection = document.getElementById("attendanceSheet");
+const controlsSection = document.getElementById("controls");
+
+// Hide all sections function
+function hideAllSections() {
+    manualEntrySection.style.display = "none";
+    attendanceSheetSection.style.display = "none";
+    controlsSection.style.display = "none";
+}
+
+// Click events
+addEntryBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    hideAllSections();
+    manualEntrySection.style.display = "block";
+});
+
+viewReportsBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    hideAllSections();
+    attendanceSheetSection.style.display = "block";
+});
+
+filterBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    hideAllSections();
+    controlsSection.style.display = "block";
+});
+
+// Show dashboard by default (optional)
+hideAllSections();
+attendanceSheetSection.style.display = "block";
+
+</script>
+    <!-- Main Content Section -->
+    <main>
+        <!-- Dashboard Overview Section -->
+        <section id="dashboard" class="dashboard-section">
+            <h2>Overview</h2>
+            <div class="dashboard-cards">
+                <div class="card">
+                    <h3>Total Students</h3>
+                    <p id="totalStudents">0</p>
+                </div>
+                <div class="card">
+                    <h3>Present Today</h3>
+                    <p id="presentToday">0</p>
+                </div>
+                <div class="card">
+                    <h3>Absent Today</h3>
+                    <p id="absentToday">0</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Controls for Filtering, Searching, Sorting, and Exporting -->
+        <section id="controls" class="controls-section">
+            <h2>Manage Attendance Data</h2>
+            <input type="text" id="searchInput" placeholder="Search by matric number..." class="control-input"/>
+            <input type="date" id="filterDate" class="control-input" />
+            <button id="filterButton" class="control-button">Filter by Date</button>
+            <select id="filterStatus" class="control-select">
+                <option value="all">Filter by Status</option>
+                <option value="present">Present</option>
+                <option value="absent">Absent</option>
+            </select>
+            <select id="sortOptions" class="control-select">
+                <option value="matric">Sort by Matric No</option>
+                <option value="date">Sort by Date</option>
+            </select>
+            <button id="exportButton" class="control-button">Export to CSV</button> 
+
+          
+      
+</section>
+
+<section id="manualEntry" class="controls-section">
+    <h2>Manual Attendance Entry (OS Experiment Manual Mode)</h2>
+    <input type="text" id="manualMatric" placeholder="Matric No" class="control-input" />
+    <input type="text" id="manualName" placeholder="Student Name" class="control-input" />
+    <input type="text" id="manualClass" placeholder="Class (eg: 10-A)" class="control-input" />
+    <input type="date" id="manualDate" class="control-input" />
+    <input type="time" id="manualTime" class="control-input" />
+    <select id="manualStatus" class="control-select">
+        <option value="Present">Present</option>
+        <option value="Absent">Absent</option>
+    </select>
+    <button id="manualSubmit" class="control-button">Add Record</button>
+</section>
+<section id="manualEntry" class="controls-section">
+<h2>Import Attendance Sheet or CSV file </h2><br>
+  <input type="file" id="importFile" accept=".csv" class="control-input" /> <br><br><br><br> 
+<button id="importButton" class="control-button">Import CSV</button>
+
+<script type="text/javascript">
+    const importButton = document.getElementById("importButton");
+const importFile = document.getElementById("importFile");
+
+importButton.addEventListener("click", () => {
+    const file = importFile.files[0];
+
+    if (!file) {
+        alert("Please select a CSV file to import!");
+        return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+        const text = e.target.result;
+        const rows = text.split("\n").filter(row => row.trim() !== "");
+
+        rows.forEach((row, index) => {
+            const columns = row.split(",");
+
+            if (columns.length >= 6) {
+                const newRecord = {
+                    matric: columns[0].trim(),
+                    name: columns[1].trim(),
+                    studentClass: columns[2].trim(),
+                    date: columns[3].trim(),
+                    time: columns[4].trim(),
+                    status: columns[5].trim()
+                };
+
+                attendanceData.push(newRecord);
+                renderSingleRecord(newRecord);
+            } else {
+                console.warn(`Skipping invalid row ${index + 1}: ${row}`);
+            }
+        });
+
+        updateDashboard(attendanceData);
+        alert("CSV file imported successfully!");
+    };
+
+    reader.readAsText(file);
+});
+
+</script>
+</section>
+<script type="text/javascript">
+    let attendanceData = []; // Initialize empty array
+
+// Modified renderTable() to only add one record
+function renderSingleRecord(record) {
+    const tableBody = document.getElementById("attendanceData");
+
+    const row = document.createElement("tr");
+    row.innerHTML = `
+        <td>${record.matric}</td>
+        <td>${record.name}</td>
+        <td>${record.studentClass}</td>
+        <td>${record.date}</td>
+        <td>${record.time}</td>
+        <td>${record.status}</td>
+    `;
+    tableBody.appendChild(row);
+}
+
+const manualSubmitButton = document.getElementById("manualSubmit");
+
+manualSubmitButton.addEventListener("click", () => {
+    const matric = document.getElementById("manualMatric").value.trim();
+    const name = document.getElementById("manualName").value.trim();
+    const studentClass = document.getElementById("manualClass").value.trim();
+    const date = document.getElementById("manualDate").value;
+    const time = document.getElementById("manualTime").value;
+    const status = document.getElementById("manualStatus").value;
+
+    if (matric && name && studentClass && date && time && status) {
+        const newRecord = {
+            matric,
+            name,
+            studentClass,
+            date,
+            time,
+            status
+        };
+
+        attendanceData.push(newRecord); // Add to array
+
+        renderSingleRecord(newRecord); // Only add the new one
+
+        updateDashboard(attendanceData); // Update dashboard stats
+
+        // Clear form
+        document.getElementById("manualMatric").value = '';
+        document.getElementById("manualName").value = '';
+        document.getElementById("manualClass").value = '';
+        document.getElementById("manualDate").value = '';
+        document.getElementById("manualTime").value = '';
+        document.getElementById("manualStatus").value = 'Present';
+
+        alert("Attendance record added successfully!");
+    } else {
+        alert("Please fill all fields before submitting!");
+    }
+});
+
+// Dashboard stats
+function updateDashboard(data) {
+    const total = data.length;
+    const present = data.filter(d => d.status.toLowerCase() === "present").length;
+    const absent = data.filter(d => d.status.toLowerCase() === "absent").length;
+
+    document.getElementById("totalStudents").textContent = total;
+    document.getElementById("presentToday").textContent = present;
+    document.getElementById("absentToday").textContent = absent;
+}
+
+</script>
+<style type="text/css">
+    #attendanceChart {
+    max-width: 300px;
+    height: auto;
+    margin: 0 auto; /* center the chart */
+    display: block;
+}
+
+</style>
+        <!-- Visual Data Analysis Section -->
+      
+        <!-- Attendance Sheet Table Section -->
+        <section id="attendanceSheet" class="attendance-section">
+            <h2>Attendance Sheet</h2>
+            <table class="attendance-table">
+                <thead>
+    <tr>
+        <th>Matric No</th>
+        <th>Name</th>
+        <th>Class</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Status</th>
+    </tr>
+</thead>
+
+                <tbody id="attendanceData">
+                    <!-- Attendance rows will be inserted here -->
+                </tbody>
+            </table>
+        </section>
+          <section id="visualAnalysis" class="visual-section">
+            <h2>Attendance Analysis</h2>
+            <canvas id="attendanceChart" width="250" height="190"></canvas>
+
+        </section>a
+
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <p>© 2024 Attendance Management System. All rights reserved.</p>
+    </footer>
+
+    <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const viewReportsButton = document.getElementById("viewReports");
+    const filterButtonNav = document.getElementById("filter");
+    const attendanceTableBody = document.getElementById("attendanceData");
+    const exportButton = document.getElementById("exportButton");
+
+    const attendanceData = []; // Will store student records
+
+    // Handle "View Reports" button
+    viewReportsButton.addEventListener("click", () => {
+        alert("Detailed Reports feature is under OS Experiment development (AI Virtual Attendance).");
+    });
+
+    // Handle "Filter" button
+    filterButtonNav.addEventListener("click", () => {
+        alert("Filter feature allows sorting data based on Class/Date/Status. Coming soon as part of AI Attendance System.");
+    });
+
+    // Chart.js Setup
+    const ctx = document.getElementById('attendanceChart').getContext('2d');
+    const attendanceChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Present', 'Absent'],
+            datasets: [{
+                label: 'Attendance',
+                data: [0, 0],
+                backgroundColor: ['#4CAF50', '#F44336'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' }
+            }
+        }
+    });
+
+    function updateChart() {
+        attendanceChart.data.datasets[0].data = [
+            attendanceData.filter(r => r.status === 'Present').length,
+            attendanceData.filter(r => r.status === 'Absent').length
+        ];
+        attendanceChart.update();
+    }
+
+    function updateOverview() {
+        document.getElementById("totalStudents").textContent = attendanceData.length;
+        document.getElementById("presentToday").textContent = attendanceData.filter(r => r.status === 'Present').length;
+        document.getElementById("absentToday").textContent = attendanceData.filter(r => r.status === 'Absent').length;
+    }
+
+    function renderTable(data) {
+        attendanceTableBody.innerHTML = "";
+
+        data.forEach(record => {
+            const row = document.createElement("tr");
+
+            const matricCell = document.createElement("td");
+            matricCell.textContent = record.matric;
+            row.appendChild(matricCell);
+
+            const nameCell = document.createElement("td");
+            nameCell.textContent = record.name;
+            row.appendChild(nameCell);
+
+            const classCell = document.createElement("td");
+            classCell.textContent = record.studentClass;
+            row.appendChild(classCell);
+
+            const dateCell = document.createElement("td");
+            dateCell.textContent = record.date;
+            row.appendChild(dateCell);
+
+            const timeCell = document.createElement("td");
+            timeCell.textContent = record.time;
+            row.appendChild(timeCell);
+
+            const statusCell = document.createElement("td");
+            const statusSpan = document.createElement("span");
+            statusSpan.textContent = record.status;
+            statusSpan.classList.add("attendance-status", record.status.toLowerCase());
+            statusCell.appendChild(statusSpan);
+            row.appendChild(statusCell);
+
+            attendanceTableBody.appendChild(row);
+        });
+
+        updateOverview();
+        updateChart();
+    }
+
+    function exportToCSV() {
+        let csv = "Matric No,Name,Class,Date,Time,Status\n";
+        attendanceData.forEach(record => {
+            csv += `${record.matric},${record.name},${record.studentClass},${record.date},${record.time},${record.status}\n`;
+        });
+
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        link.setAttribute("href", URL.createObjectURL(blob));
+        link.setAttribute("download", "attendance_sheet.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    exportButton.addEventListener("click", exportToCSV);
+
+    // Dummy AI-based Virtual Attendance Records
+    attendanceData.push(
+        { matric: 'M1001', name: 'John Doe', studentClass: '10-A', date: '2024-04-25', time: '09:05 AM', status: 'Present' },
+        { matric: 'M1002', name: 'Jane Smith', studentClass: '10-B', date: '2024-04-25', time: '09:07 AM', status: 'Absent' },
+        { matric: 'M1003', name: 'Alice Johnson', studentClass: '10-C', date: '2024-04-25', time: '09:02 AM', status: 'Present' },
+        { matric: 'M1004', name: 'Bob Brown', studentClass: '10-A', date: '2024-04-25', time: '09:10 AM', status: 'Present' }
+    );
+
+    renderTable(attendanceData);
+});
+
+    </script>
+</body>
+</html>
